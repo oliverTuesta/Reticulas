@@ -1,16 +1,15 @@
+#include <iostream>
 #include "Functions.h"
-#include <bits/stdc++.h>
 
 using namespace std;
 
 int main()
 {
-
-    Functions *f;
+    Functions* f;
 
     //arr = conjunto A
-    int *arr;
-    bool **relacion;
+    int* arr;
+    bool** relacion;
     int n;
     do
     {
@@ -22,14 +21,16 @@ int main()
 
     for (int i = 0; i < n; i++)
     {
-        do
-        {
-            printf("A[%d]: ", i + 1);
-            cin >> arr[i];
-        } while (arr[i] < -99 || arr[i] > 99);
+        printf("A[%d]: ", i + 1);
+        cin >> arr[i];
     }
     f = new Functions(relacion, arr, n);
+    cout << "Producto cartesiano AxA: \n";
     f->getProductoCartesiano();
-    f->esOrdenParcial();
+    f->reflexiva();
+    f->antisimetrica();
+    f->transitiva();
+    f->ordenParcial();
+    
     return 0;
 }
