@@ -6,7 +6,7 @@ using namespace std;
 int main()
 {
 
-    Functions f;
+    Functions *f;
 
     //arr = conjunto A
     int *arr;
@@ -25,9 +25,9 @@ int main()
         printf("A[%d]: ", i + 1);
         cin >> arr[i];
     }
-
+    f = new Functions(relacion, arr, n);
     cout << "Producto cartesiano AxA: \n";
-    f.getProductoCartesiano(relacion, arr, n);
+    f->getProductoCartesiano();
 
     return 0;
 }
