@@ -85,10 +85,10 @@ void Functions::showRelacion()
     {
         printf("%d\t", this->arr[i]);
     }
-    printf("\n");
-    for (int i = 0; i < this->n; i++)
+    printf("\n\t");
+    for (int i = 0; i <= (this->n - 1) * 8; i++)
     {
-        printf("\t_");
+        printf("_");
     }
     printf("\n\n");
     //fin de numeros de referencia
