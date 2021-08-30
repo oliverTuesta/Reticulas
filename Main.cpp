@@ -1,4 +1,4 @@
-#include "Functions.h"
+#include "Reticulas.h"
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -6,7 +6,7 @@ using namespace std;
 int main()
 {
 
-    Functions *f;
+    Reticulas *r;
 
     //arr = conjunto A
     int *arr;
@@ -16,20 +16,32 @@ int main()
     {
         cout << "Escriba la cantidad de elementos del conjunto A (4 a 10): ";
         cin >> n;
-    } while (n < 4 || n > 10);
+    } while (n < 3 || n > 10);
 
     arr = new int[n];
 
+    bool existe;
     for (int i = 0; i < n; i++)
     {
+
         do
         {
-            printf("A[%d]: ", i + 1);
+            existe = false;
+            printf("A[%02d]: ", i + 1);
             cin >> arr[i];
-        } while (arr[i] < -99 || arr[i] > 99);
+
+            for (int j = 0; j < i; j++)
+            {
+                if (arr[i] == arr[j])
+                    existe = true;
+            }
+
+        } while (arr[i] < -99 || arr[i] > 99 || existe);
     }
-    f = new Functions(relacion, arr, n);
-    f->getProductoCartesiano();
-    f->esOrdenParcial();
+
+    r = new Reticulas(relacion, arr, n);
+    r->mostrarConjunto();
+    r->getProductoCartesiano();
+    r->esOrdenParcial();
     return 0;
 }
