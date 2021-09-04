@@ -149,7 +149,7 @@ void Reticulas::asignarValores()
 // }
 void Reticulas::ingresarR()
 {
-    printf("Para generar R ingrese valores de la tabla AxA y digite CONFIRMAR para terminar el proceso: \n");
+    printf("Ingrese la relacion R sobre AxA, cuando termine digite CONFIRMAR para terminar el proceso: \n");
     int nCuadrado = n * n;
     int num, i = 0;
     while (cin >> num && i < nCuadrado)
