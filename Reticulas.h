@@ -86,7 +86,7 @@ void Reticulas::getProductoCartesiano()
 void Reticulas::showRelacion()
 {
     // Numeros de referencia superiores
-    printf("\t");
+    printf("\n\t");
     for (int i = 0; i < this->n; i++)
     {
         printf("%02d\t", this->arr[i]);
@@ -108,7 +108,7 @@ void Reticulas::showRelacion()
         {
             printf("%d\t", this->relacion[i][j]);
         }
-        printf("\n");
+        printf("\n  |\n");
     }
 }
 
@@ -249,7 +249,7 @@ bool Reticulas::esOrdenParcial()
     cout << "Antisimetrica: " << antisime << endl;
     cout << "Transitiva: " << trans << endl;
     cout << reflex << antisime << trans << endl;
-    if (reflex == true && antisime == true && trans == true)
+    if (reflex && antisime && trans)
     {
         cout << "Es de Orden Parcial" << endl;
     }
@@ -257,7 +257,7 @@ bool Reticulas::esOrdenParcial()
     {
         cout << "No es de Orden Parcial" << endl;
     }
-    return reflex == true && antisime == true && trans == true;
+    return reflex && antisime && trans;
 }
 
 //Selection Sort
@@ -289,7 +289,7 @@ void Reticulas::Ordenamiento(int *arr, int n)
 
 void Reticulas::mostrarConjunto()
 {
-    printf("A = {");
+    printf("\nA = {");
     for (int i = 0; i < n; i++)
     {
         printf("%d", arr[i]);
