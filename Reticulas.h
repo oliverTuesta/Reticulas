@@ -175,15 +175,15 @@ bool Reticulas::esAntisimetrica()
 {
     for (int i = 0; i < this->n; i++)
     {
-        for (int j = 0; j < this->n; j++)
+        for (int j = 0; j < n; j++)
         {
-            if (relacion[i][j] != relacion[j][i])
+            if (i != j && relacion[i][j] && relacion[j][i])
             {
-                return true;
+                return false;
             }
         }
     }
-    return false;
+    return true;
 }
 
 // bool Reticulas::esTransitiva()
