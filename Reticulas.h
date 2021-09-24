@@ -14,6 +14,7 @@ private:
     int *arr;
     int n;
     bool **relacion;
+    bool **nuevaRelacion; // relacion sin diagonal y elevada al cuadrado
 
     //producto cartesiano AxA
     map<int, pair<int, int>> productoCartesiano;
@@ -28,14 +29,15 @@ private:
     void swap(int *, int *);
     void Ordenamiento(int *, int);
 
+    void crearNueavaRelacion();
+
 public:
     Reticulas(/* args */);
     Reticulas(bool **, int *, int);
     ~Reticulas();
     void getProductoCartesiano();
-    void showRelacion();
+    void showRelacion(bool **);
     bool esOrdenParcial();
-
     void mostrarConjunto();
 };
 
@@ -81,32 +83,33 @@ void Reticulas::getProductoCartesiano()
 
     printf("\n\n");
     this->ingresarR();
-    this->showRelacion();
+    this->showRelacion(relacion);
+    crearNueavaRelacion();
 }
-void Reticulas::showRelacion()
+void Reticulas::showRelacion(bool **relacion)
 {
     // Numeros de referencia superiores
     printf("\n\t");
-    for (int i = 0; i < this->n; i++)
+    for (int i = 0; i < n; i++)
     {
-        printf("%02d\t", this->arr[i]);
+        printf("%02d\t", arr[i]);
     }
     printf("\n");
-    for (int i = 0; i < this->n * 2; i++)
+    for (int i = 0; i < n * 2; i++)
     {
         printf("_____");
     }
     printf("\n\n");
     //fin de numeros de referencia
 
-    for (int i = 0; i < this->n; i++)
+    for (int i = 0; i < n; i++)
     {
         //numeros de referencia lateral izquierad
-        printf("%02d|\t", this->arr[i]);
+        printf("%02d|\t", arr[i]);
         //fin de numeroes de referencia
         for (int j = 0; j < n; j++)
         {
-            printf("%d\t", this->relacion[i][j]);
+            printf("%d\t", relacion[i][j]);
         }
         printf("\n  |\n");
     }
@@ -120,33 +123,6 @@ void Reticulas::asignarValores()
     }
 }
 
-// void Reticulas::ingresarR()
-// {
-
-//     //num es el valor en la tabla de productos cartesianos
-//     int n, num;
-//     int nCuadrado = this->n * this->n;
-//     do
-//     {
-//         printf("Ingrese la longitud de R: ");
-//         cin >> n;
-//     } while (n < 1 || n > nCuadrado);
-//     printf("Ingrese los valores de la tabla del producto cartesiano AxA: \n");
-//     for (int i = 0; i < n; i++)
-//     {
-//         do
-//         {
-//             if (n < 10)
-//                 printf("[%d]", i + 1);
-//             else if (n < 100)
-//                 printf("[%02d] ", i + 1);
-//             else
-//                 printf("[%03d] ", i + 1);
-//             cin >> num;
-//         } while (num < 1 || num > nCuadrado || this->relacion[valores[productoCartesiano[num].first]][valores[productoCartesiano[num].second]]);
-//         this->relacion[valores[productoCartesiano[num].first]][valores[productoCartesiano[num].second]] = 1;
-//     }
-// }
 void Reticulas::ingresarR()
 {
     printf("Ingrese la relacion R sobre AxA, cuando termine digite CONFIRMAR para terminar el proceso: \n");
@@ -185,33 +161,6 @@ bool Reticulas::esAntisimetrica()
     }
     return true;
 }
-
-// bool Reticulas::esTransitiva()
-// {
-//     bool trans = false;
-//     for (int i = 0; i < n; i++)
-//     {
-//         for (int j = 0; j < n; j++)
-//         {
-//             if (relacion[i][j] == 1 && i != j)
-//             {
-//                 for (int k = 0; k < n; k++)
-//                 {
-//                     if (relacion[j][k] == 1 && relacion[i][k] == 1)
-//                     {
-//                         trans = true;
-//                     }
-//                     if (relacion[j][k] == 1 && relacion[i][k] == 0)
-//                     {
-//                         trans = false;
-//                         return trans;
-//                     }
-//                 }
-//             }
-//         }
-//     }
-//     return trans;
-// }
 
 bool Reticulas::esTransitiva()
 {
@@ -298,4 +247,63 @@ void Reticulas::mostrarConjunto()
     }
     printf("}\n");
 }
+
+void Reticulas::crearNueavaRelacion()
+{
+
+    bool **aux = new bool *[n];
+
+    for (int i = 0; i < n; i++)
+    {
+        aux[i] = new bool[n];
+        for (int j = 0; j < this->n; j++)
+        {
+            aux[i][j] = 0;
+        }
+    }
+
+    //eliminando diagonal
+    nuevaRelacion = new bool *[n];
+    for (int i = 0; i < n; i++)
+    {
+        nuevaRelacion[i] = new bool[n];
+        for (int j = 0; j < n; j++)
+        {
+            if (i != j)
+            {
+                nuevaRelacion[i][j] = relacion[i][j];
+            }
+        }
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            for (int z = 0; z < n; z++)
+            {
+                if (nuevaRelacion[i][z] && nuevaRelacion[z][j])
+                {
+                    aux[i][j] = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (nuevaRelacion[i][j] && aux[i][j])
+            {
+                nuevaRelacion[i][j] = 0;
+            }
+        }
+    }
+
+    showRelacion(aux);
+    showRelacion(nuevaRelacion);
+}
+
 #endif
