@@ -43,8 +43,8 @@ public:
 
     bool esReticula();
     bool tieneMinimaCotaSuperior(int, int);
-    bool tieneMinimaCotaInferior(int, int);
-    bool tieneMaximaYMinimaCotaSuperior();
+    bool tieneMaximaCotaInferior(int, int);
+    // bool tieneMaximaYMinimaCotaSuperior();
 };
 
 Reticulas::Reticulas(/* args */)
@@ -325,30 +325,37 @@ bool Reticulas::esReticula()
     {
         for (int j = i + 1; j < n; j++)
         {
+            printf("Par %d ; %d:\n", arr[i], arr[j]);
 
-            if (!tieneMinimaCotaInferior(i, j) || !tieneMinimaCotaSuperior(i, j))
+            if (!tieneMaximaCotaInferior(i, j) || !tieneMinimaCotaSuperior(i, j))
             {
                 minimaCotaInferiorYSuperior = false;
-                cout << "No tiene minima cota inferior o cota superior\n"
-                     << "en : " << i << "; " << j << endl;
             }
         }
     }
 
-    return minimaCotaInferiorYSuperior && tieneMaximaYMinimaCotaSuperior();
+    return minimaCotaInferiorYSuperior;
 }
 
-bool Reticulas::tieneMinimaCotaInferior(int a, int b)
+bool Reticulas::tieneMaximaCotaInferior(int a, int b)
 {
+
+    if (nuevaRelacion[a][b] || nuevaRelacion[b][a])
+    {
+        return true;
+    }
 
     bool tieneMin = false;
     vector<int> cotasInferiores;
 
+    printf("Cotas inferiores: \n");
+
     for (int i = 0; i < n; i++)
     {
-        if (relacion[a][i] && relacion[b][i])
+        if (relacion[i][a] && relacion[i][b])
         {
             cotasInferiores.push_back(i);
+            printf("%d\n", arr[i]);
         }
     }
     if (cotasInferiores.size() == 1)
@@ -362,10 +369,13 @@ bool Reticulas::tieneMinimaCotaInferior(int a, int b)
             {
                 if (!relacion[cotasInferiores[i]][cotasInferiores[j]])
                 {
+                    printf("NO tiene maxima cota inferior\n");
+
                     break;
                 }
                 if (j == cotasInferiores.size() - 1)
                 {
+                    printf("Maxima cota inferior = %d\n", arr[cotasInferiores[i]]);
 
                     esMinima = true;
                 }
@@ -383,14 +393,21 @@ bool Reticulas::tieneMinimaCotaInferior(int a, int b)
 bool Reticulas::tieneMinimaCotaSuperior(int a, int b)
 {
 
+    if (nuevaRelacion[a][b] || nuevaRelacion[b][a])
+    {
+        cout << "Estan relacionados directamente\n";
+        return true;
+    }
+
     bool tieneMax = false;
     vector<int> cotasSuperiores;
-
+    printf("Cotas superiores: \n");
     for (int i = 0; i < n; i++)
     {
-        if (relacion[i][a] && relacion[i][b])
+        if (relacion[a][i] == true && relacion[b][i] == true)
         {
             cotasSuperiores.push_back(i);
+            printf("%d\n", arr[i]);
         }
     }
     if (cotasSuperiores.size() == 1)
@@ -403,7 +420,11 @@ bool Reticulas::tieneMinimaCotaSuperior(int a, int b)
             for (int j = 0; j < cotasSuperiores.size(); j++)
             {
                 if (!relacion[cotasSuperiores[i]][cotasSuperiores[j]])
+                {
+                    printf("NO tiene minima cota superior \n");
+
                     break;
+                }
 
                 if (j == cotasSuperiores.size() - 1)
                 {
@@ -412,6 +433,8 @@ bool Reticulas::tieneMinimaCotaSuperior(int a, int b)
             }
             if (esMaximo)
             {
+                printf("Minima cota superior = %d\n", arr[cotasSuperiores[i]]);
+
                 tieneMax = true;
                 break;
             }
@@ -420,40 +443,40 @@ bool Reticulas::tieneMinimaCotaSuperior(int a, int b)
     return tieneMax;
 }
 
-bool Reticulas::tieneMaximaYMinimaCotaSuperior()
-{
-    bool tieneMinima = false;
-    bool tieneMaxima = false;
-    int *niveles = new int[n];
+// bool Reticulas::tieneMaximaYMinimaCotaSuperior()
+// {
+//     bool tieneMinima = false;
+//     bool tieneMaxima = false;
+//     int *niveles = new int[n];
 
-    for (int i = 0; i < n; i++)
-    {
-        int nivelAlQuePertenece = 0;
-        for (int j = 0; j < n; j++)
-            nivelAlQuePertenece += nuevaRelacion[j][i];
+//     for (int i = 0; i < n; i++)
+//     {
+//         int nivelAlQuePertenece = 0;
+//         for (int j = 0; j < n; j++)
+//             nivelAlQuePertenece += nuevaRelacion[j][i];
 
-        niveles[nivelAlQuePertenece]++;
-        printf("%d = %d\n", i, nivelAlQuePertenece);
-    }
-    //minima cota superior
-    for (int i = 0; i < n; i++)
-    {
-        if (niveles[i] != 0)
-        {
-            tieneMinima = niveles[i] == 1;
-            break;
-        }
-    }
-    //maxima cota superior
-    for (int i = 0; i < n; i++)
-    {
-        if (niveles[n - i] != 0)
-        {
-            tieneMinima = niveles[i] == 1;
-            break;
-        }
-    }
-    return tieneMinima && tieneMaxima;
-}
+//         niveles[nivelAlQuePertenece]++;
+//         printf("%d = %d\n", i, nivelAlQuePertenece);
+//     }
+//     //minima cota superior
+//     for (int i = 0; i < n; i++)
+//     {
+//         if (niveles[i] != 0)
+//         {
+//             tieneMinima = niveles[i] == 1;
+//             break;
+//         }
+//     }
+//     //maxima cota superior
+//     for (int i = 0; i < n; i++)
+//     {
+//         if (niveles[n - i] != 0)
+//         {
+//             tieneMinima = niveles[i] == 1;
+//             break;
+//         }
+//     }
+//     return tieneMinima && tieneMaxima;
+// }
 
 #endif
