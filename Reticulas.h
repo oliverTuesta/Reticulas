@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <map>
+#include <vector>
 
 using namespace std;
 
@@ -39,6 +40,11 @@ public:
     void showRelacion(bool **);
     bool esOrdenParcial();
     void mostrarConjunto();
+
+    bool esReticula();
+    bool tieneMinimaCotaSuperior(int, int);
+    bool tieneMinimaCotaInferior(int, int);
+    bool tieneMaximaYMinimaCotaSuperior();
 };
 
 Reticulas::Reticulas(/* args */)
@@ -194,6 +200,7 @@ bool Reticulas::esOrdenParcial()
     bool reflex = this->esReflexiva();
     bool antisime = this->esAntisimetrica();
     bool trans = this->esTransitiva();
+    bool reticula = esReticula();
     cout << "Reflexiva: " << reflex << endl;
     cout << "Antisimetrica: " << antisime << endl;
     cout << "Transitiva: " << trans << endl;
@@ -201,6 +208,9 @@ bool Reticulas::esOrdenParcial()
     if (reflex && antisime && trans)
     {
         cout << "Es de Orden Parcial" << endl;
+
+        reticula ? cout << "SI" : cout << "NO";
+        cout << " es reticula";
     }
     else
     {
@@ -304,6 +314,146 @@ void Reticulas::crearNueavaRelacion()
 
     showRelacion(aux);
     showRelacion(nuevaRelacion);
+}
+
+bool Reticulas::esReticula()
+{
+
+    bool minimaCotaInferiorYSuperior = true;
+
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (int j = i + 1; j < n; j++)
+        {
+
+            if (!tieneMinimaCotaInferior(i, j) || !tieneMinimaCotaSuperior(i, j))
+            {
+                minimaCotaInferiorYSuperior = false;
+                cout << "No tiene minima cota inferior o cota superior\n"
+                     << "en : " << i << "; " << j << endl;
+            }
+        }
+    }
+
+    return minimaCotaInferiorYSuperior && tieneMaximaYMinimaCotaSuperior();
+}
+
+bool Reticulas::tieneMinimaCotaInferior(int a, int b)
+{
+
+    bool tieneMin = false;
+    vector<int> cotasInferiores;
+
+    for (int i = 0; i < n; i++)
+    {
+        if (relacion[a][i] && relacion[b][i])
+        {
+            cotasInferiores.push_back(i);
+        }
+    }
+    if (cotasInferiores.size() == 1)
+        tieneMin = true;
+    else
+    {
+        int esMinima = false;
+        for (int i = 0; i < cotasInferiores.size(); i++)
+        {
+            for (int j = 0; j < cotasInferiores.size(); j++)
+            {
+                if (!relacion[cotasInferiores[i]][cotasInferiores[j]])
+                {
+                    break;
+                }
+                if (j == cotasInferiores.size() - 1)
+                {
+
+                    esMinima = true;
+                }
+            }
+            if (esMinima)
+            {
+                tieneMin = true;
+                break;
+            }
+        }
+    }
+    return tieneMin;
+}
+
+bool Reticulas::tieneMinimaCotaSuperior(int a, int b)
+{
+
+    bool tieneMax = false;
+    vector<int> cotasSuperiores;
+
+    for (int i = 0; i < n; i++)
+    {
+        if (relacion[i][a] && relacion[i][b])
+        {
+            cotasSuperiores.push_back(i);
+        }
+    }
+    if (cotasSuperiores.size() == 1)
+        tieneMax = true;
+    else
+    {
+        int esMaximo = false;
+        for (int i = 0; i < cotasSuperiores.size(); i++)
+        {
+            for (int j = 0; j < cotasSuperiores.size(); j++)
+            {
+                if (!relacion[cotasSuperiores[i]][cotasSuperiores[j]])
+                    break;
+
+                if (j == cotasSuperiores.size() - 1)
+                {
+                    esMaximo = true;
+                }
+            }
+            if (esMaximo)
+            {
+                tieneMax = true;
+                break;
+            }
+        }
+    }
+    return tieneMax;
+}
+
+bool Reticulas::tieneMaximaYMinimaCotaSuperior()
+{
+    bool tieneMinima = false;
+    bool tieneMaxima = false;
+    int *niveles = new int[n];
+
+    for (int i = 0; i < n; i++)
+    {
+        int nivelAlQuePertenece = 0;
+        for (int j = 0; j < n; j++)
+            nivelAlQuePertenece += nuevaRelacion[j][i];
+
+        niveles[nivelAlQuePertenece]++;
+        printf("%d = %d\n", i, nivelAlQuePertenece);
+    }
+    //minima cota superior
+    for (int i = 0; i < n; i++)
+    {
+        if (niveles[i] != 0)
+        {
+            tieneMinima = niveles[i] == 1;
+            break;
+        }
+    }
+    //maxima cota superior
+    for (int i = 0; i < n; i++)
+    {
+        if (niveles[n - i] != 0)
+        {
+            tieneMinima = niveles[i] == 1;
+            break;
+        }
+    }
+    return tieneMinima && tieneMaxima;
 }
 
 #endif
