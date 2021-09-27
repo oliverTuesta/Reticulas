@@ -367,7 +367,7 @@ bool Reticulas::esReticula()
             {
                 CotaInferiorYSuperior = false;
             }
-            if (tieneMaximaCotaInferior(i, j, maximaCotaInf) || tieneMinimaCotaSuperior(i, j, minimaCotaSup))
+            else
             {
 
                 if (maximaCotaInf == minima && minimaCotaSup == maxima)
@@ -422,8 +422,6 @@ bool Reticulas::tieneMaximaCotaInferior(int a, int b, int &maximaCotInf)
             {
                 if (!relacion[cotasInferiores[j]][cotasInferiores[i]])
                 {
-                    printf("NO tiene maxima cota inferior\n");
-
                     break;
                 }
                 if (j == cotasInferiores.size() - 1)
@@ -477,8 +475,6 @@ bool Reticulas::tieneMinimaCotaSuperior(int a, int b, int &minimaCotaSup)
             {
                 if (!relacion[cotasSuperiores[i]][cotasSuperiores[j]])
                 {
-                    printf("NO tiene minima cota superior \n");
-
                     break;
                 }
 
