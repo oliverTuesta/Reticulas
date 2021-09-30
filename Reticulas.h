@@ -357,10 +357,11 @@ bool Reticulas::esReticula()
 
     for (int i = 0; i < n - 1; i++)
     {
-        maximaCotaInf = 0;
-        minimaCotaSup = 0;
+
         for (int j = i + 1; j < n; j++)
         {
+            maximaCotaInf = 0;
+            minimaCotaSup = 0;
             printf("Par %d ; %d:\n", arr[i], arr[j]);
 
             if (!tieneMaximaCotaInferior(i, j, maximaCotaInf) || !tieneMinimaCotaSuperior(i, j, minimaCotaSup))
@@ -392,6 +393,10 @@ bool Reticulas::tieneMaximaCotaInferior(int a, int b, int &maximaCotInf)
 
     if (nuevaRelacion[a][b] || nuevaRelacion[b][a])
     {
+        if (nuevaRelacion[a][b])
+            maximaCotInf = a;
+        else
+            maximaCotInf = b;
         return true;
     }
 
@@ -447,6 +452,10 @@ bool Reticulas::tieneMinimaCotaSuperior(int a, int b, int &minimaCotaSup)
     if (nuevaRelacion[a][b] || nuevaRelacion[b][a])
     {
         cout << "Estan relacionados directamente\n";
+        if (nuevaRelacion[a][b])
+            minimaCotaSup = b;
+        else
+            minimaCotaSup = a;
         return true;
     }
 
